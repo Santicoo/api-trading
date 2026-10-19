@@ -40,8 +40,8 @@ La API tiene dos funciones:
 Necesitas **Python 3.10 o superior**.
 
 ```bash
-git clone <URL-DEL-REPOSITORIO>
-cd api-ganancias-carteras
+git clone https://github.com/Santicoo/api-trading.git
+cd api-trading
 pip install -r api/requirements.txt
 python api/main.py
 ```
