@@ -1,0 +1,24 @@
+# Datos que crea la API al usarla (carteras del usuario)
+api/carteras.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# Editores y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Este repositorio solo contiene la API: nunca el código ni los datos reales de los bots
+/journal/
+/multi_journal/
+/meme_journal/
+/matriz/
+/data/
+*.lock

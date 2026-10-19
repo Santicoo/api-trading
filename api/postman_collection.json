@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "API Ganancias de Carteras",
+    "description": "Demostración de las 4 peticiones (GET, POST, PUT, DELETE). Arranca primero el servidor con: python api/main.py",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "cartera_id", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. GET - Resumen de ganancias de los bots",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/bots"
+      }
+    },
+    {
+      "name": "1b. GET - Ganancias del bot multi filtrado por ETH",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/bots/multi/ganancias?moneda=ETH",
+          "host": ["{{base_url}}"],
+          "path": ["bots", "multi", "ganancias"],
+          "query": [{ "key": "moneda", "value": "ETH" }]
+        }
+      }
+    },
+    {
+      "name": "2. POST - Crear cartera",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('cartera_id', pm.response.json().id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/carteras",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Mi cartera cripto\",\n  \"posiciones\": [\n    { \"activo\": \"BTC\", \"cantidad\": 0.05, \"precio_compra\": 60000 },\n    { \"activo\": \"ETH\", \"cantidad\": 1, \"precio_compra\": 3000 }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "2b. GET - Ganancias de la cartera creada",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/carteras/{{cartera_id}}/ganancias"
+      }
+    },
+    {
+      "name": "3. PUT - Actualizar cartera",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{base_url}}/carteras/{{cartera_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Mi cartera cripto (actualizada)\",\n  \"posiciones\": [\n    { \"activo\": \"SOL\", \"cantidad\": 10, \"precio_compra\": 80 },\n    { \"activo\": \"AAPL\", \"cantidad\": 2, \"precio_compra\": 200, \"precio_actual\": 230 }\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "4. DELETE - Eliminar cartera",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Status 204', () => pm.response.to.have.status(204));"]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": "{{base_url}}/carteras/{{cartera_id}}"
+      }
+    }
+  ]
+}

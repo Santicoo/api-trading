@@ -1,0 +1,99 @@
+{
+  "global": {
+    "inicial": 5000.0,
+    "equity": 5423.7132,
+    "realized": 423.7132,
+    "unrealized": -9.1054,
+    "total": 5414.6078,
+    "pnl_pct": 8.2922,
+    "activos": 2,
+    "halted": 0
+  },
+  "books": {
+    "BTC": {
+      "coin": "BTC",
+      "inicial": 1000.0,
+      "equity": 763.638,
+      "peak": 1000.0,
+      "realized": -236.362,
+      "n_trades": 4,
+      "wins": 0,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "ETH": {
+      "coin": "ETH",
+      "inicial": 1000.0,
+      "equity": 989.5545,
+      "peak": 1149.3723,
+      "realized": -10.4455,
+      "n_trades": 6,
+      "wins": 2,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "SOL": {
+      "coin": "SOL",
+      "inicial": 1000.0,
+      "equity": 1153.0034,
+      "peak": 1237.6441,
+      "realized": 153.0034,
+      "n_trades": 6,
+      "wins": 3,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "XRP": {
+      "coin": "XRP",
+      "inicial": 1000.0,
+      "equity": 1189.8802,
+      "peak": 1189.8802,
+      "realized": 189.8802,
+      "n_trades": 6,
+      "wins": 3,
+      "halted": false,
+      "halt_reason": "",
+      "pos": {
+        "coin": "XRP",
+        "side": 1,
+        "entry_px": 0.49625975,
+        "stop_px": 0.48492294,
+        "target_px": 0.52120074,
+        "size": 6297.431996,
+        "notional": 3125.16,
+        "leverage": 2.626,
+        "risk_usd": 71.39,
+        "liq_px": 0.24812988,
+        "opened_at": "2026-10-14T19:12:37.128685+00:00"
+      }
+    },
+    "HYPE": {
+      "coin": "HYPE",
+      "inicial": 1000.0,
+      "equity": 1327.6371,
+      "peak": 1406.7745,
+      "realized": 327.6371,
+      "n_trades": 4,
+      "wins": 3,
+      "halted": false,
+      "halt_reason": "",
+      "pos": {
+        "coin": "HYPE",
+        "side": 1,
+        "entry_px": 22.85326752,
+        "stop_px": 22.36381304,
+        "target_px": 23.93006737,
+        "size": 162.748997,
+        "notional": 3719.35,
+        "leverage": 2.801,
+        "risk_usd": 79.66,
+        "liq_px": 11.42663376,
+        "opened_at": "2026-10-14T19:20:24.706798+00:00"
+      }
+    }
+  },
+  "updated": "2026-10-15T12:00:00+00:00"
+}

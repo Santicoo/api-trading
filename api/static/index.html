@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mis Billeteras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #eef1f5;
+    --phone: #f7f8fa;
+    --card: #ffffff;
+    --text: #12161c;
+    --muted: #6b7380;
+    --line: #e4e7ec;
+    --accent: #3b5bfd;
+    --accent-soft: #e8ecff;
+    --up: #0f9f6e;
+    --up-soft: #e3f6ee;
+    --down: #d93a3a;
+    --down-soft: #fdeaea;
+    --hero-a: #1d2b64;
+    --hero-b: #3b5bfd;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 16px rgba(16, 24, 40, .06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #07090d;
+      --phone: #0e1117;
+      --card: #161a22;
+      --text: #eef1f6;
+      --muted: #8b93a1;
+      --line: #252b36;
+      --accent: #7b93ff;
+      --accent-soft: #1d2440;
+      --up: #34d399;
+      --up-soft: #10291f;
+      --down: #f87171;
+      --down-soft: #321717;
+      --hero-a: #18214a;
+      --hero-b: #3a4fc4;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .phone {
+    max-width: 430px; height: 100vh; height: 100dvh; margin: 0 auto; background: var(--phone);
+    position: relative; display: flex; flex-direction: column; overflow: hidden;
+  }
+  @media (min-width: 600px) {
+    body { padding: 32px 0; }
+    .phone { height: min(860px, calc(100vh - 64px)); border-radius: 36px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
+  }
+  header.top {
+    display: flex; align-items: center; gap: 12px; padding: 20px 20px 8px;
+  }
+  header.top h1 { font-size: 18px; margin: 0; flex: 1; font-weight: 700; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card); color: var(--text); display: grid; place-items: center; cursor: pointer;
+  }
+  .icon-btn:hover { border-color: var(--accent); }
+  .icon-btn svg { width: 20px; height: 20px; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; font-weight: 800;
+  }
+  main { flex: 1; padding: 8px 20px 100px; overflow-y: auto; }
+
+  .hero {
+    border-radius: 24px; padding: 22px; color: #fff;
+    background: linear-gradient(135deg, var(--hero-a), var(--hero-b));
+    box-shadow: var(--shadow);
+  }
+  .hero .label { font-size: 13px; opacity: .8; }
+  .hero .big { font-size: 34px; font-weight: 800; letter-spacing: -.02em; margin: 6px 0 10px; font-variant-numeric: tabular-nums; }
+  .hero .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; }
+  .hero .pill { background: rgba(255,255,255,.16); padding: 5px 10px; border-radius: 999px; font-weight: 600; }
+
+  .section-title { display: flex; align-items: baseline; justify-content: space-between; margin: 26px 0 12px; }
+  .section-title h2 { font-size: 16px; margin: 0; font-weight: 700; }
+  .section-title span { font-size: 12px; color: var(--muted); }
+
+  .card {
+    background: var(--card); border-radius: 18px; padding: 16px; box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+  .list { display: grid; gap: 10px; }
+  .item {
+    display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; width: 100%;
+    font: inherit; color: inherit;
+  }
+  .item:hover { border-color: var(--accent); }
+  .coin {
+    width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0;
+    font-weight: 800; font-size: 13px; background: var(--accent-soft); color: var(--accent);
+  }
+  .item .grow { flex: 1; min-width: 0; }
+  .item .name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .item .right { text-align: right; font-variant-numeric: tabular-nums; }
+  .item .val { font-weight: 700; font-size: 15px; }
+  .chip { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 999px; margin-top: 4px; }
+  .chip.up { color: var(--up); background: var(--up-soft); }
+  .chip.down { color: var(--down); background: var(--down-soft); }
+  .up-t { color: var(--up); } .down-t { color: var(--down); }
+
+  .empty { text-align: center; padding: 28px 16px; color: var(--muted); font-size: 14px; }
+  .empty b { display: block; color: var(--text); font-size: 15px; margin-bottom: 4px; }
+
+  .btn {
+    border: 0; border-radius: 14px; padding: 13px 18px; font: inherit; font-weight: 700; cursor: pointer;
+    background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn.ghost { background: var(--accent-soft); color: var(--accent); }
+  .btn.danger { background: var(--down-soft); color: var(--down); }
+  .btn.block { width: 100%; }
+  .btn:disabled { opacity: .5; cursor: wait; }
+
+  .fab {
+    position: absolute; right: 20px; bottom: 82px; width: 56px; height: 56px; border-radius: 18px;
+    border: 0; background: var(--accent); color: #fff; cursor: pointer; box-shadow: 0 8px 24px rgba(59,91,253,.4);
+    display: grid; place-items: center; z-index: 5;
+  }
+  .fab svg { width: 26px; height: 26px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .stat .k { font-size: 12px; color: var(--muted); }
+  .stat .v { font-size: 18px; font-weight: 800; margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+
+  .bar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin-top: 8px; }
+  .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+
+  /* barra de actividad API (muestra el método HTTP usado) */
+  .apilog {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 20px 16px; background: var(--card);
+    border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace; z-index: 4;
+  }
+  .apilog .m { font-weight: 800; padding: 2px 7px; border-radius: 6px; color: #fff; }
+  .m.GET { background: #0f9f6e; } .m.POST { background: #d68a00; } .m.PUT { background: #3b5bfd; } .m.DELETE { background: #d93a3a; }
+  .apilog .path { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+  .apilog .st { font-weight: 800; }
+
+  /* hoja inferior (formulario) */
+  .scrim {
+    position: fixed; inset: 0; background: rgba(5,8,15,.45); display: none; align-items: flex-end; justify-content: center; z-index: 20;
+  }
+  .scrim.open { display: flex; }
+  .sheet {
+    background: var(--phone); width: 100%; max-width: 430px; max-height: 92vh; overflow-y: auto;
+    border-radius: 24px 24px 0 0; padding: 10px 20px 24px; animation: up .22s ease-out;
+  }
+  @keyframes up { from { transform: translateY(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .grab { width: 40px; height: 5px; border-radius: 9px; background: var(--line); margin: 4px auto 14px; }
+  .sheet h3 { margin: 0 0 14px; font-size: 18px; }
+  label.f { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  input {
+    width: 100%; padding: 12px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--card);
+    color: var(--text); font: inherit; font-size: 15px;
+  }
+  input:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+  .pos { padding: 12px; margin-top: 10px; position: relative; }
+  .pos .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pos .rm { position: absolute; top: 8px; right: 8px; border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 18px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--text); color: var(--phone);
+    padding: 12px 16px; border-radius: 14px; font-size: 14px; font-weight: 600; z-index: 40; max-width: 360px;
+    display: none;
+  }
+  .toast.show { display: block; animation: up .2s ease-out; }
+  .toast.err { background: var(--down); color: #fff; }
+
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; background: var(--line); border-radius: 14px; margin-bottom: 16px; }
+  .tabs a { text-align: center; padding: 9px 0; border-radius: 11px; font-weight: 700; font-size: 14px; color: var(--muted); text-decoration: none; }
+  .tabs a.on { background: var(--card); color: var(--text); box-shadow: var(--shadow); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; }
+  .badge.short { background: var(--down-soft); color: var(--down); }
+  .badge.long { background: var(--up-soft); color: var(--up); }
+  .badge.warn { background: var(--accent-soft); color: var(--accent); }
+  .item.compact { padding: 12px 14px; }
+
+  .demo-tag {
+    align-self: center; margin: 2px 0 6px; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    background: #fff3d6; color: #8a5a00;
+  }
+  @media (prefers-color-scheme: dark) { .demo-tag { background: #3a2c0a; color: #f5c765; } }
+
+  /* Los hijos de un grid tienen min-width:auto: sin esto un nombre largo ensancha la tarjeta
+     y empuja el saldo fuera de la pantalla. */
+  .list > * { min-width: 0; }
+  header.top h1 { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* lista agrupada (una tarjeta con filas), para listas largas en el celular */
+  .rows { background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; }
+  .rows > * + * { border-top: 1px solid var(--line); }
+  .rowi {
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 14px; min-width: 0;
+    background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rowi:active { background: var(--phone); }
+  .rowi .coin { width: 38px; height: 38px; border-radius: 12px; font-size: 11px; }
+  .rowi .grow { flex: 1; min-width: 0; }
+  .rowi .name { font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .rowi .name .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rowi .name .badge { margin: 0; flex-shrink: 0; }
+  /* en las billeteras la moneda nunca se recorta: si no cabe la etiqueta, baja a otra línea */
+  .wal .rowi .name { flex-wrap: wrap; row-gap: 3px; }
+  .wal .rowi .name .t { flex-shrink: 0; }
+  .rowi .sub { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rowi .right { text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .rowi .val { font-weight: 700; font-size: 14px; }
+  .rowi .pct { font-size: 12px; font-weight: 700; margin-top: 2px; }
+  /* fila en dos líneas: el nombre usa todo el ancho y el saldo baja a la segunda línea */
+  .rowi.stack .line { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-width: 0; }
+  .rowi.stack .line + .line { margin-top: 3px; }
+  .rowi.stack .name { font-size: 15px; line-height: 1.25; }
+  .rowi.stack .name .t { white-space: normal; overflow: visible; }
+  .rowi.stack .pct, .rowi.stack .val { flex-shrink: 0; margin: 0; font-variant-numeric: tabular-nums; }
+  .rowi.stack .pct { font-size: 14px; }
+  .rowi.stack .val { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .rowi.stack .sub { margin: 0; }
+  .chev { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; transition: transform .15s; }
+  .wal.open .chev { transform: rotate(90deg); }
+  .det { display: none; grid-template-columns: 1fr 1fr; gap: 10px 12px; padding: 2px 14px 14px 64px; font-size: 13px; }
+  .wal.open .det { display: grid; }
+  .det .k { color: var(--muted); font-size: 11px; }
+  .det .v { font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 1px; }
+  .det .full { grid-column: 1 / -1; }
+  @media (max-width: 360px) { .det { padding-left: 14px; } }
+
+  .filters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 12px; }
+  .filters button {
+    min-width: 0; border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 14px;
+    padding: 8px 4px; font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px;
+  }
+  .filters button b { font-size: 17px; font-variant-numeric: tabular-nums; }
+  .filters button span { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .filters button.on { background: var(--text); border-color: var(--text); color: var(--card); }
+  .filters button.on span { color: inherit; opacity: .75; }
+  .loading { color: var(--muted); text-align: center; padding: 40px 0; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header class="top" id="top"></header>
+  <main id="view"><div class="loading">Cargando…</div></main>
+  <button class="fab" id="fab" title="Nueva billetera" aria-label="Nueva billetera">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+  <div class="apilog" id="apilog"><span>Actividad API: —</span></div>
+</div>
+
+<div class="scrim" id="scrim">
+  <form class="sheet" id="sheet" autocomplete="off"></form>
+</div>
+<div class="toast" id="toast"></div>
+
+<datalist id="activos">
+  <option value="BTC"><option value="ETH"><option value="SOL"><option value="XRP"><option value="HYPE"><option value="ZEC">
+</datalist>
+
+<script>
+const API = "";  // misma dirección que la API (servida por FastAPI)
+const $ = (s) => document.querySelector(s);
+const usd = new Intl.NumberFormat("es-CO", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+const num = new Intl.NumberFormat("es-CO", { maximumFractionDigits: 8 });
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const signo = (v) => (v > 0 ? "+" : "");
+const chip = (pct) => `<span class="chip ${pct >= 0 ? "up" : "down"}">${signo(pct)}${pct.toFixed(2)}%</span>`;
+const color = (v) => (v >= 0 ? "up-t" : "down-t");
+const iniciales = (s) => esc(s.trim().slice(0, 2).toUpperCase());
+
+// ---------- llamada a la API (y registro del método usado) ----------
+async function api(method, path, body) {
+  let res;
+  try {
+    res = await fetch(API + path, {
+      method,
+      headers: body ? { "Content-Type": "application/json" } : {},
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    // fetch solo falla así si la petición no llegó al servidor (servidor apagado o navegador sin conexión)
+    $("#apilog").innerHTML =
+      `<span class="m ${method}">${method}</span><span class="path">${esc(path)}</span><span class="st down-t">sin conexión</span>`;
+    throw new Error(navigator.onLine
+      ? "No hay respuesta de la API. Comprueba que el servidor esté corriendo (python api/main.py)."
+      : "El navegador está sin conexión. Revisa el Wi‑Fi o, si tienes DevTools abierto, quita el modo «Offline» en la pestaña Network.");
+  }
+  $("#apilog").innerHTML =
+    `<span class="m ${method}">${method}</span><span class="path">${esc(path)}</span>` +
+    `<span class="st ${res.ok ? "up-t" : "down-t"}">${res.status}</span>`;
+  if (res.status === 204) return null;
+  const data = await res.json();
+  if (!res.ok) {
+    const d = data.detail;
+    const msg = Array.isArray(d) ? d.map((e) => `${e.loc.slice(1).join(".")}: ${e.msg}`).join(" · ") : d;
+    throw new Error(msg || `Error ${res.status}`);
+  }
+  return data;
+}
+
+function toast(msg, err = false) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " err" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => (t.className = "toast"), 3200);
+}
+
+const ICON_BACK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`;
+const ICON_RELOAD = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>`;
+
+// Pantalla "padre" de cada ruta. El botón volver no usa history.back(): si se entra directo a una
+// página (enlace o recarga) no hay historial y el botón no haría nada.
+function padre() {
+  const [, ruta, id] = location.hash.split("/");
+  if (ruta === "billetera") return "#/carteras";
+  if (ruta === "bot") return `#/sim/${id}`;
+  return "#/";
+}
+
+// Si ya estamos en ese hash no se dispara "hashchange", así que se vuelve a pintar a mano.
+function irA(hash) {
+  if (location.hash === hash) router();
+  else location.hash = hash;
+}
+
+function header(titulo, atras) {
+  $("#top").innerHTML = atras
+    ? `<button class="icon-btn" onclick="irA(padre())" aria-label="Volver">${ICON_BACK}</button><h1>${esc(titulo)}</h1>`
+    : `<div class="avatar">C</div><h1>Hola 👋<br><span style="font-size:13px;color:var(--muted);font-weight:500">Tus billeteras</span></h1>
+       <button class="icon-btn" onclick="router()" aria-label="Actualizar">${ICON_RELOAD}</button>`;
+}
+
+// ---------- pantallas ----------
+const tabs = (a) => `<div class="tabs"><a href="#/" class="${a === "sim" ? "on" : ""}">Simulador</a><a href="#/carteras" class="${a === "car" ? "on" : ""}">Mis carteras</a></div>`;
+
+async function pantallaSimulador() {
+  header("Inicio", false);
+  $("#fab").style.display = "none";
+  const grupos = await api("GET", "/simulador");
+  const bots = grupos.filter((g) => g.tipo === "bot");
+  const matriz = grupos.filter((g) => g.tipo === "matriz").sort((a, b) => b.rentabilidad_pct - a.rentabilidad_pct);
+  const ini = bots.reduce((a, g) => a + g.capital_inicial, 0);
+  const val = bots.reduce((a, g) => a + g.capital_inicial + g.ganancia_total, 0);
+  const gan = val - ini, pct = ini ? (gan / ini) * 100 : 0;
+  const bil = bots.reduce((a, g) => a + g.num_billeteras, 0);
+
+  $("#view").innerHTML = `${tabs("sim")}
+    <section class="hero">
+      <div class="label">Saldo de tus bots simulados · ${bil} billeteras</div>
+      <div class="big">${usd.format(val)}</div>
+      <div class="row">
+        <span class="pill">${signo(gan)}${usd.format(gan)}</span>
+        <span class="pill">${signo(pct)}${pct.toFixed(2)}%</span>
+        <span style="opacity:.75">capital inicial ${usd.format(ini)}</span>
+      </div>
+    </section>
+    <div class="section-title"><h2>Bots</h2><span>${bots.length}</span></div>
+    <div class="rows">${bots.map(filaGrupo).join("")}</div>
+    <div class="section-title"><h2>Matriz de estrategias</h2><span>${matriz.length} · de mejor a peor</span></div>
+    <div class="rows">${matriz.map(filaGrupo).join("")}</div>`;
+}
+
+const ICON_CHEV = `<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`;
+const fmtPx = (v) => (v == null ? "—" : num.format(+(+v).toPrecision(6)));
+// Icono de la moneda: hasta 5 letras completas (kPEPE, TRUMP) con letra más chica si no caben.
+const moneda = (m) => {
+  const t = m.length > 5 ? m.slice(0, 4) : m;
+  return `<div class="coin"${t.length === 5 ? ' style="font-size:9.5px;letter-spacing:-.02em"' : ""}>${esc(t)}</div>`;
+};
+const pctTxt = (v) => `<div class="pct ${color(v)}">${signo(v)}${v.toFixed(2)}%</div>`;
+
+// "Estrategia A · 15m · maker" -> ["Estrategia A", "15m · maker"]
+function partesTitulo(titulo) {
+  const [base, ...resto] = titulo.split(" · ");
+  return [base, resto.join(" · ")];
+}
+
+function filaGrupo(g) {
+  const [base, variante] = partesTitulo(g.titulo);
+  const abiertas = g.posiciones_abiertas === 1 ? "1 abierta" : `${g.posiciones_abiertas} abiertas`;
+  const sub = g.tipo === "bot"
+    ? `${g.num_billeteras} billetera${g.num_billeteras === 1 ? "" : "s"} · ${abiertas}`
+    : `${variante || "original"} · ${abiertas}`;
+  return `
+  <button class="rowi stack" onclick="location.hash='#/sim/${g.id}'">
+    <div class="grow">
+      <div class="line"><div class="name"><span class="t">${esc(base)}</span></div>${pctTxt(g.rentabilidad_pct)}</div>
+      <div class="line"><div class="sub">${esc(sub)}</div><div class="val">${usd.format(g.capital_inicial + g.ganancia_total)}</div></div>
+    </div>
+    ${ICON_CHEV}
+  </button>`;
+}
+
+async function pantallaGrupo(id) {
+  header("Simulador", true);
+  $("#fab").style.display = "none";
+  const g = await api("GET", `/simulador/${id}`);
+  const [base, variante] = partesTitulo(g.titulo);
+  $("#top h1").textContent = base;
+  const libros = [...g.billeteras].sort((a, b) => b.ganancia - a.ganancia);
+
+  const fila = (l) => {
+    const p = l.posicion;
+    const etiqueta = p
+      ? `<span class="badge ${p.lado === "largo" ? "long" : "short"}">${p.lado === "largo" ? "▲" : "▼"} ${p.lado}${p.apalancamiento ? " ×" + p.apalancamiento : ""}</span>`
+      : l.detenida ? `<span class="badge warn">detenida</span>` : "";
+    const detalle = [
+      ["Capital inicial", usd.format(l.capital_inicial)],
+      ["Ganancia", `<span class="${color(l.ganancia)}">${signo(l.ganancia)}${usd.format(l.ganancia)}</span>`],
+      ["Operaciones", `${l.operaciones} (${l.ganadas} ganadas)`],
+      ["Caída desde el máximo", `${l.caida_desde_maximo_pct}%`],
+      ...(p ? [
+        ["Entrada", fmtPx(p.precio_entrada)],
+        ["Apalancamiento", p.apalancamiento ? `×${p.apalancamiento}` : "—"],
+        ["Stop", fmtPx(p.stop)],
+        ["Objetivo", fmtPx(p.objetivo)],
+        ["Abierta desde", new Date(p.abierta_desde).toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short" }), "full"],
+      ] : []),
+      ...(l.detenida ? [["Detenida", esc(l.motivo_detencion || "sí"), "full"]] : []),
+    ].map(([k, v, cls]) => `<div class="${cls || ""}"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+
+    return `
+    <div class="wal">
+      <button class="rowi" aria-expanded="false">
+        ${moneda(l.moneda)}
+        <div class="grow"><div class="name"><span class="t">${esc(l.moneda)}</span>${etiqueta}</div>
+          <div class="sub">${l.operaciones} ops · ${l.tasa_acierto_pct}% acierto</div></div>
+        <div class="right"><div class="val">${usd.format(l.equity)}</div>${pctTxt(l.rentabilidad_pct)}</div>
+        ${ICON_CHEV}
+      </button>
+      <div class="det">${detalle}</div>
+    </div>`;
+  };
+
+  const cuenta = {
+    todas: libros.length,
+    abiertas: libros.filter((l) => l.posicion).length,
+    ganando: libros.filter((l) => l.ganancia >= 0).length,
+    perdiendo: libros.filter((l) => l.ganancia < 0).length,
+  };
+  const nombres = { todas: "Todas", abiertas: "Abiertas", ganando: "Ganando", perdiendo: "Perdiendo" };
+  const filtros = libros.length > 1
+    ? `<div class="filters">${Object.keys(nombres).map((f) =>
+        `<button type="button" data-f="${f}" class="${f === "todas" ? "on" : ""}"><b>${cuenta[f]}</b><span>${nombres[f]}</span></button>`).join("")}</div>`
+    : "";
+
+  $("#view").innerHTML = `
+    <section class="hero">
+      <div class="label">${esc([variante, g.descripcion].filter(Boolean).join(" · "))}</div>
+      <div class="big">${usd.format(g.capital_inicial + g.ganancia_total)}</div>
+      <div class="row">
+        <span class="pill">${signo(g.ganancia_total)}${usd.format(g.ganancia_total)}</span>
+        <span class="pill">${signo(g.rentabilidad_pct)}${g.rentabilidad_pct.toFixed(2)}%</span>
+        <span style="opacity:.75">inicial ${usd.format(g.capital_inicial)}</span>
+      </div>
+    </section>
+    <div class="stats">
+      <div class="card stat"><div class="k">Realizada</div><div class="v ${color(g.ganancia_realizada)}">${signo(g.ganancia_realizada)}${usd.format(g.ganancia_realizada)}</div></div>
+      <div class="card stat"><div class="k">No realizada (abiertas)</div><div class="v ${color(g.ganancia_no_realizada)}">${signo(g.ganancia_no_realizada)}${usd.format(g.ganancia_no_realizada)}</div></div>
+    </div>
+    ${g.tipo === "bot" ? `<button class="btn ghost block" style="margin-top:14px" onclick="location.hash='#/bot/${g.id}'">Ver estadísticas y operaciones</button>` : ""}
+    <div class="section-title"><h2>Billeteras</h2><span>${libros.length} · por ganancia</span></div>
+    ${filtros}
+    <div class="rows" id="billeteras"></div>
+    <div class="hint" style="margin-top:12px">Toca una billetera para ver el detalle. Su saldo es el capital más lo ganado en operaciones cerradas; la ganancia de posiciones abiertas se suma solo al total del grupo.</div>`;
+
+  const pasa = {
+    todas: () => true,
+    abiertas: (l) => l.posicion,
+    ganando: (l) => l.ganancia >= 0,
+    perdiendo: (l) => l.ganancia < 0,
+  };
+  const pintar = (f) => {
+    const lista = $("#billeteras");
+    const visibles = libros.filter(pasa[f]);
+    lista.innerHTML = visibles.length ? visibles.map(fila).join("")
+      : `<div class="empty">Ninguna billetera ${f === "abiertas" ? "tiene una posición abierta" : "en este filtro"}.</div>`;
+    lista.querySelectorAll(".rowi").forEach((b) => (b.onclick = () => {
+      b.setAttribute("aria-expanded", b.parentElement.classList.toggle("open"));
+    }));
+  };
+  document.querySelectorAll(".filters button").forEach((b) => (b.onclick = () => {
+    document.querySelectorAll(".filters button").forEach((x) => x.classList.toggle("on", x === b));
+    pintar(b.dataset.f);
+  }));
+  pintar("todas");
+}
+
+async function pantallaCarteras() {
+  header("Inicio", false);
+  $("#fab").style.display = "grid";
+  const carteras = await api("GET", "/carteras");
+
+  const invertido = carteras.reduce((a, c) => a + c.total_invertido, 0);
+  const valor = carteras.reduce((a, c) => a + c.valor_actual, 0);
+  const gan = valor - invertido;
+  const pct = invertido ? (gan / invertido) * 100 : 0;
+
+  const tarjetaCartera = (c) => `
+    <button class="card item" onclick="location.hash='#/billetera/${c.id}'">
+      <div class="coin">${iniciales(c.nombre)}</div>
+      <div class="grow"><div class="name">${esc(c.nombre)}</div>
+        <div class="sub">${c.posiciones.length} activo${c.posiciones.length === 1 ? "" : "s"} · ${c.posiciones.map((p) => esc(p.activo)).join(", ")}</div></div>
+      <div class="right"><div class="val">${usd.format(c.valor_actual)}</div>${chip(c.rentabilidad_pct)}</div>
+    </button>`;
+
+  $("#view").innerHTML = `${tabs("car")}
+    <section class="hero">
+      <div class="label">Saldo total de tus carteras</div>
+      <div class="big">${usd.format(valor)}</div>
+      <div class="row">
+        <span class="pill">${signo(gan)}${usd.format(gan)}</span>
+        <span class="pill">${signo(pct)}${pct.toFixed(2)}%</span>
+        <span style="opacity:.75">invertido ${usd.format(invertido)}</span>
+      </div>
+    </section>
+    <div class="section-title"><h2>Mis carteras</h2><span>${carteras.length}</span></div>
+    <div class="list">${carteras.length ? carteras.map(tarjetaCartera).join("") :
+      `<div class="card empty"><b>Aún no tienes carteras propias</b>Toca el botón + para crear la primera. Las billeteras de tus bots están en la pestaña Simulador.</div>`}</div>`;
+}
+
+async function pantallaBilletera(id) {
+  header("Billetera", true);
+  $("#fab").style.display = "none";
+  const c = await api("GET", `/carteras/${id}/ganancias`);
+  $("#top h1").textContent = c.nombre;
+
+  const maxValor = Math.max(...c.posiciones.map((p) => p.valor_actual), 1);
+  $("#view").innerHTML = `
+    <section class="hero">
+      <div class="label">Valor actual</div>
+      <div class="big">${usd.format(c.valor_actual)}</div>
+      <div class="row">
+        <span class="pill">${signo(c.ganancia_total)}${usd.format(c.ganancia_total)}</span>
+        <span class="pill">${signo(c.rentabilidad_pct)}${c.rentabilidad_pct.toFixed(2)}%</span>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="card stat"><div class="k">Invertido</div><div class="v">${usd.format(c.total_invertido)}</div></div>
+      <div class="card stat"><div class="k">Ganancia</div><div class="v ${color(c.ganancia_total)}">${signo(c.ganancia_total)}${usd.format(c.ganancia_total)}</div></div>
+    </div>
+
+    <div class="section-title"><h2>Activos</h2><span>${c.posiciones.length}</span></div>
+    <div class="list">${c.posiciones.map((p) => `
+      <div class="card">
+        <div class="item" style="cursor:default">
+          ${moneda(p.activo)}
+          <div class="grow"><div class="name">${esc(p.activo)}</div>
+            <div class="sub">${num.format(p.cantidad)} × ${usd.format(p.precio_actual)}</div></div>
+          <div class="right"><div class="val">${usd.format(p.valor_actual)}</div>
+            <div class="sub ${color(p.ganancia)}" style="font-weight:700">${signo(p.ganancia)}${usd.format(p.ganancia)} (${signo(p.rentabilidad_pct)}${p.rentabilidad_pct.toFixed(2)}%)</div></div>
+        </div>
+        <div class="bar"><i style="width:${(p.valor_actual / maxValor) * 100}%"></i></div>
+        <div class="hint">Compra a ${usd.format(p.precio_compra)} · precio: ${esc(p.fuente_precio)}</div>
+      </div>`).join("")}</div>
+
+    <div class="actions">
+      <button class="btn ghost" id="editar">Editar</button>
+      <button class="btn danger" id="eliminar">Eliminar</button>
+    </div>`;
+
+  $("#editar").onclick = () => abrirFormulario(c);
+  $("#eliminar").onclick = () => confirmarEliminar(c);
+}
+
+async function pantallaBot(bot) {
+  header(`Bot ${bot.toUpperCase()}`, true);
+  $("#fab").style.display = "none";
+  const [g, ops] = await Promise.all([api("GET", `/bots/${bot}/ganancias`), api("GET", `/bots/${bot}/operaciones?limite=15`)]);
+  const r = g.resumen;
+  const monedas = Object.entries(g.por_moneda).sort((a, b) => b[1].pnl - a[1].pnl);
+
+  $("#view").innerHTML = `
+    <section class="hero">
+      <div class="label">${esc(r.descripcion)}</div>
+      <div class="big">${usd.format(r.capital_inicial + r.ganancia_total)}</div>
+      <div class="row">
+        <span class="pill">${signo(r.ganancia_total)}${usd.format(r.ganancia_total)}</span>
+        <span class="pill">${signo(r.rentabilidad_pct)}${r.rentabilidad_pct.toFixed(2)}%</span>
+        <span style="opacity:.75">inicial ${usd.format(r.capital_inicial)}</span>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="card stat"><div class="k">Operaciones</div><div class="v">${g.operaciones_cerradas}</div></div>
+      <div class="card stat"><div class="k">Tasa de acierto</div><div class="v">${g.tasa_acierto_pct.toFixed(1)}%</div></div>
+      <div class="card stat"><div class="k">Ganadas / perdidas</div><div class="v"><span class="up-t">${g.ganadas}</span> / <span class="down-t">${g.perdidas}</span></div></div>
+      <div class="card stat"><div class="k">Comisiones</div><div class="v">${usd.format(g.comisiones_pagadas)}</div></div>
+    </div>
+
+    <div class="section-title"><h2>Por moneda</h2><span>${monedas.length}</span></div>
+    <div class="list">${monedas.map(([m, d]) => `
+      <div class="card item" style="cursor:default">
+        ${moneda(m)}
+        <div class="grow"><div class="name">${esc(m)}</div><div class="sub">${d.operaciones} operaciones · ${d.ganadas} ganadas</div></div>
+        <div class="right"><div class="val ${color(d.pnl)}">${signo(d.pnl)}${usd.format(d.pnl)}</div></div>
+      </div>`).join("")}</div>
+
+    <div class="section-title"><h2>Últimas operaciones</h2><span>${ops.length}</span></div>
+    <div class="list">${ops.map((o) => `
+      <div class="card item" style="cursor:default">
+        <div class="coin" style="background:${o.pnl >= 0 ? "var(--up-soft)" : "var(--down-soft)"};color:${o.pnl >= 0 ? "var(--up)" : "var(--down)"}">${o.lado === "largo" ? "▲" : "▼"}</div>
+        <div class="grow"><div class="name">${esc(o.moneda)} · ${o.lado}</div>
+          <div class="sub">${new Date(o.cerrado).toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short" })} · ${esc(o.motivo_cierre)}</div></div>
+        <div class="right"><div class="val ${color(o.pnl)}">${signo(o.pnl)}${usd.format(o.pnl)}</div></div>
+      </div>`).join("")}</div>`;
+}
+
+// ---------- formulario crear / editar (POST / PUT) ----------
+function filaPosicion(p = {}) {
+  const div = document.createElement("div");
+  div.className = "card pos";
+  div.innerHTML = `
+    <button type="button" class="rm" aria-label="Quitar">×</button>
+    <div class="grid">
+      <div><label class="f">Activo</label><input name="activo" list="activos" required placeholder="BTC" value="${esc(p.activo ?? "")}"></div>
+      <div><label class="f">Cantidad</label><input name="cantidad" type="number" step="any" min="0" required placeholder="0.05" value="${p.cantidad ?? ""}"></div>
+      <div><label class="f">Precio de compra</label><input name="precio_compra" type="number" step="any" min="0" required placeholder="60000" value="${p.precio_compra ?? ""}"></div>
+      <div><label class="f">Precio actual <span style="font-weight:400">(opcional)</span></label><input name="precio_actual" type="number" step="any" min="0" placeholder="auto" value="${p.fuente_precio === "enviado por el usuario" ? p.precio_actual : ""}"></div>
+    </div>`;
+  div.querySelector(".rm").onclick = () => {
+    if ($("#posiciones").children.length > 1) div.remove();
+    else toast("La billetera necesita al menos un activo", true);
+  };
+  return div;
+}
+
+function abrirFormulario(cartera) {
+  const editando = Boolean(cartera);
+  const f = $("#sheet");
+  f.innerHTML = `
+    <div class="grab"></div>
+    <h3>${editando ? "Editar billetera" : "Nueva billetera"}</h3>
+    <label class="f">Nombre</label>
+    <input name="nombre" required maxlength="60" placeholder="Mi cartera cripto" value="${editando ? esc(cartera.nombre) : ""}">
+    <div id="posiciones"></div>
+    <button type="button" class="btn ghost block" id="add" style="margin-top:10px">+ Agregar activo</button>
+    <div class="hint">Si dejas vacío el precio actual, se usa el último precio guardado (BTC, ETH, SOL, XRP, HYPE, ZEC). Para otros activos, como acciones, escríbelo.</div>
+    <div class="actions">
+      <button type="button" class="btn ghost" id="cancelar">Cancelar</button>
+      <button type="submit" class="btn">${editando ? "Guardar (PUT)" : "Crear (POST)"}</button>
+    </div>`;
+  const cont = $("#posiciones");
+  (editando ? cartera.posiciones : [{}]).forEach((p) => cont.appendChild(filaPosicion(p)));
+  $("#add").onclick = () => cont.appendChild(filaPosicion());
+  $("#cancelar").onclick = cerrarHoja;
+
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    const cuerpo = {
+      nombre: f.nombre.value.trim(),
+      posiciones: [...cont.children].map((d) => {
+        const v = (n) => d.querySelector(`[name=${n}]`).value;
+        const p = { activo: v("activo").trim().toUpperCase(), cantidad: +v("cantidad"), precio_compra: +v("precio_compra") };
+        if (v("precio_actual")) p.precio_actual = +v("precio_actual");
+        return p;
+      }),
+    };
+    const btn = f.querySelector("[type=submit]");
+    btn.disabled = true;
+    try {
+      const r = editando
+        ? await api("PUT", `/carteras/${cartera.id}`, cuerpo)
+        : await api("POST", "/carteras", cuerpo);
+      cerrarHoja();
+      toast(editando ? "Billetera actualizada · PUT 200" : "Billetera creada · POST 201");
+      if (editando) pantallaBilletera(r.id); else location.hash = `#/billetera/${r.id}`;
+    } catch (err) {
+      toast(err.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+  $("#scrim").classList.add("open");
+  f.nombre.focus();
+}
+
+function confirmarEliminar(c) {
+  const f = $("#sheet");
+  f.onsubmit = null;
+  f.innerHTML = `
+    <div class="grab"></div>
+    <h3>¿Eliminar “${esc(c.nombre)}”?</h3>
+    <p style="color:var(--muted);margin:0">Se borrará la billetera y sus ${c.posiciones.length} activos. Esta acción no se puede deshacer.</p>
+    <div class="actions">
+      <button type="button" class="btn ghost" id="cancelar">Cancelar</button>
+      <button type="button" class="btn danger" id="ok">Eliminar (DELETE)</button>
+    </div>`;
+  $("#cancelar").onclick = cerrarHoja;
+  $("#ok").onclick = async () => {
+    try {
+      await api("DELETE", `/carteras/${c.id}`);
+      cerrarHoja();
+      toast("Billetera eliminada · DELETE 204");
+      location.hash = "#/carteras";
+    } catch (err) { toast(err.message, true); }
+  };
+  $("#scrim").classList.add("open");
+}
+
+function cerrarHoja() { $("#scrim").classList.remove("open"); }
+$("#scrim").addEventListener("click", (e) => { if (e.target.id === "scrim") cerrarHoja(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarHoja(); });
+$("#fab").onclick = () => abrirFormulario(null);
+
+// ---------- navegación ----------
+async function router() {
+  const [, ruta, id] = location.hash.split("/");
+  try {
+    if (ruta === "billetera" && id) await pantallaBilletera(id);
+    else if (ruta === "bot" && id) await pantallaBot(id);
+    else if (ruta === "sim" && id) await pantallaGrupo(id);
+    else if (ruta === "carteras") await pantallaCarteras();
+    else await pantallaSimulador();
+    $("#view").scrollTop = 0;
+  } catch (err) {
+    $("#view").innerHTML = `<div class="card empty" style="margin-top:20px"><b>No se pudo cargar</b>${esc(err.message)}<br><br>
+      <button class="btn ghost" onclick="irA('#/')">Volver al inicio</button></div>`;
+  }
+}
+window.addEventListener("hashchange", router);
+router();
+
+// Si la API sirve datos de ejemplo (repositorio público), se avisa con una etiqueta fija arriba.
+fetch(API + "/").then((r) => r.json()).then((d) => {
+  if (d.datos !== "demo") return;
+  const tag = document.createElement("div");
+  tag.className = "demo-tag";
+  tag.textContent = "Datos de ejemplo · no son reales";
+  $("#top").after(tag);
+}).catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+{
+  "estrategia": "demo-a_azar",
+  "cfg": {
+    "titulo": "Estrategia A · entrada al azar",
+    "origen": "8 monedas",
+    "interval": "15m"
+  },
+  "global": {
+    "inicial": 8000.0,
+    "equity": 5575.3974,
+    "realized": -2424.6026,
+    "unrealized": 4.7609,
+    "total": 5580.1583,
+    "pnl_pct": -30.248,
+    "activos": 2,
+    "halted": 1
+  },
+  "books": {
+    "BTC": {
+      "coin": "BTC",
+      "inicial": 1000.0,
+      "equity": 803.9021,
+      "peak": 1180.8622,
+      "realized": -196.0979,
+      "n_trades": 13,
+      "wins": 6,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "ETH": {
+      "coin": "ETH",
+      "inicial": 1000.0,
+      "equity": 1043.2721,
+      "peak": 1260.5925,
+      "realized": 43.2721,
+      "n_trades": 5,
+      "wins": 0,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "SOL": {
+      "coin": "SOL",
+      "inicial": 1000.0,
+      "equity": 599.9223,
+      "peak": 1023.7715,
+      "realized": -400.0777,
+      "n_trades": 11,
+      "wins": 5,
+      "halted": true,
+      "halt_reason": "límite de pérdida alcanzado (ejemplo)",
+      "pos": null
+    },
+    "XRP": {
+      "coin": "XRP",
+      "inicial": 1000.0,
+      "equity": 670.4482,
+      "peak": 1195.5026,
+      "realized": -329.5518,
+      "n_trades": 16,
+      "wins": 8,
+      "halted": false,
+      "halt_reason": "",
+      "pos": {
+        "coin": "XRP",
+        "side": -1,
+        "entry_px": 0.5050551,
+        "stop_px": 0.51776873,
+        "target_px": 0.47708513,
+        "size": 3164.077345,
+        "notional": 1598.03,
+        "leverage": 2.384,
+        "risk_usd": 40.23,
+        "liq_px": 0.75758266,
+        "opened_at": "2026-10-14T19:23:07.426551+00:00"
+      }
+    },
+    "HYPE": {
+      "coin": "HYPE",
+      "inicial": 1000.0,
+      "equity": 755.2775,
+      "peak": 1142.8543,
+      "realized": -244.7225,
+      "n_trades": 12,
+      "wins": 4,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "DOGE": {
+      "coin": "DOGE",
+      "inicial": 1000.0,
+      "equity": 321.9376,
+      "peak": 1215.6204,
+      "realized": -678.0624,
+      "n_trades": 17,
+      "wins": 8,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "kPEPE": {
+      "coin": "kPEPE",
+      "inicial": 1000.0,
+      "equity": 354.7686,
+      "peak": 1108.6624,
+      "realized": -645.2314,
+      "n_trades": 21,
+      "wins": 11,
+      "halted": false,
+      "halt_reason": "",
+      "pos": null
+    },
+    "TRUMP": {
+      "coin": "TRUMP",
+      "inicial": 1000.0,
+      "equity": 1025.869,
+      "peak": 1217.051,
+      "realized": 25.869,
+      "n_trades": 16,
+      "wins": 7,
+      "halted": false,
+      "halt_reason": "",
+      "pos": {
+        "coin": "TRUMP",
+        "side": 1,
+        "entry_px": 9.06400805,
+        "stop_px": 8.86575997,
+        "target_px": 9.50015382,
+        "size": 310.480379,
+        "notional": 2814.2,
+        "leverage": 2.743,
+        "risk_usd": 61.55,
+        "liq_px": 4.53200403,
+        "opened_at": "2026-10-14T16:51:17.052843+00:00"
+      }
+    }
+  },
+  "updated": "2026-10-15T12:00:00+00:00"
+}
