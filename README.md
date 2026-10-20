@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📈 API Ganancias de Carteras
+# API Ganancias de Carteras
 
 **Consulta las ganancias de tus bots de trading simulado y gestiona tus propias carteras.**
 Una API REST con FastAPI, una app web con aspecto de celular y una colección de Postman.
@@ -17,14 +17,14 @@ Una API REST con FastAPI, una app web con aspecto de celular y una colección de
 
 ---
 
-## ✨ ¿Qué hace?
+## ¿Qué hace?
 
 La API tiene dos funciones:
 
 | | Función | Cómo |
 |---|---|---|
-| 🤖 | **Consultar las billeteras del simulador** | Lee los archivos que escriben los bots de *paper trading* y devuelve saldo, ganancia, rentabilidad, operaciones y posición abierta de cada billetera. **Solo lectura.** |
-| 💼 | **Gestionar carteras propias** | Creas, consultas, reemplazas y eliminas carteras (GET, POST, PUT, DELETE). La API calcula la ganancia de cada posición y del total. |
+| | **Consultar las billeteras del simulador** | Lee los archivos que escriben los bots de *paper trading* y devuelve saldo, ganancia, rentabilidad, operaciones y posición abierta de cada billetera. **Solo lectura.** |
+| | **Gestionar carteras propias** | Creas, consultas, reemplazas y eliminas carteras (GET, POST, PUT, DELETE). La API calcula la ganancia de cada posición y del total. |
 
 > Una **billetera** es el libro de una moneda dentro de un bot o estrategia, con su propio capital.
 > Este repositorio **no contiene el código de ningún bot**: solo la API y los datos de ejemplo para probarla.
@@ -35,7 +35,7 @@ La API tiene dos funciones:
 
 ---
 
-## 🚀 Inicio rápido
+##  Inicio rápido
 
 Necesitas **Python 3.10 o superior**.
 
@@ -50,16 +50,16 @@ Listo. Sin configurar nada, la API arranca con los [datos de ejemplo](#-datos-de
 
 | Qué | Dónde |
 |---|---|
-| 📱 App web | http://127.0.0.1:8000/app/ |
-| 📚 Documentación interactiva (Swagger) | http://127.0.0.1:8000/docs |
-| 🧾 Esquema OpenAPI | http://127.0.0.1:8000/openapi.json |
-| 🔌 API | http://127.0.0.1:8000 |
+| App web | http://127.0.0.1:8000/app/ |
+| Documentación interactiva (Swagger) | http://127.0.0.1:8000/docs |
+| Esquema OpenAPI | http://127.0.0.1:8000/openapi.json |
+| API | http://127.0.0.1:8000 |
 
 Para usar otro puerto, define la variable `PORT` antes de arrancar (por defecto 8000). Se detiene con `Ctrl + C`.
 
 ---
 
-## 📱 La app web
+## La app web
 
 `/app/` es una página con aspecto de celular (HTML y JavaScript, sin librerías ni compilación) que usa la misma API.
 Cuando trabaja con los datos de ejemplo muestra una etiqueta amarilla fija. Su **barra inferior muestra la última
@@ -80,7 +80,7 @@ petición HTTP enviada** (método, ruta y estado), así cada pantalla deja ver q
   </tr>
 </table>
 
-### 📚 Documentación interactiva
+### Documentación interactiva
 
 FastAPI genera `/docs` (Swagger) a partir del código: lista cada ruta con su descripción y códigos de respuesta,
 y permite probarlas desde el navegador.
@@ -89,7 +89,7 @@ y permite probarlas desde el navegador.
 
 ---
 
-## 🔌 Endpoints
+## Endpoints
 
 | Método | Ruta | Respuesta | Qué hace |
 |---|---|---|---|
@@ -108,7 +108,7 @@ Referencia completa, con todos los campos, errores y el formato de los datos: **
 
 ---
 
-## 🧪 Ejemplos
+## Ejemplos
 
 ### Crear una cartera (`POST /carteras`)
 
@@ -147,7 +147,7 @@ Responde `201 Created`. La ganancia de cada posición es `cantidad × (precio ac
 }
 ```
 
-> 💡 Si no envías `precio_actual`, la API usa la última vela guardada en `data/<ACTIVO>_1h.csv` y lo indica en
+> Si no envías `precio_actual`, la API usa la última vela guardada en `data/<ACTIVO>_1h.csv` y lo indica en
 > `fuente_precio`. Para activos sin archivo de precios (por ejemplo acciones), envíalo tú.
 
 ### Consultar las billeteras de un bot (`GET /simulador/multi`)
@@ -192,7 +192,7 @@ curl http://127.0.0.1:8000/simulador/multi
 
 ---
 
-## 🧭 Arquitectura
+## Arquitectura
 
 ```mermaid
 flowchart LR
@@ -211,7 +211,7 @@ flowchart LR
 
 ---
 
-## 🗂️ Datos de ejemplo y datos propios
+## Datos de ejemplo y datos propios
 
 Los bots reales **no forman parte de este repositorio**. Para que cualquiera pueda ejecutar la API, se incluye
 [`demo-data/`](demo-data): datos **inventados** con el mismo formato que los reales
@@ -240,7 +240,7 @@ El formato de las carpetas y archivos que espera la API está descrito en
 
 ---
 
-## 📮 Postman
+## Postman
 
 1. Arranca el servidor (`python api/main.py`).
 2. En Postman: **Import** → selecciona [`api/postman_collection.json`](api/postman_collection.json).
@@ -249,14 +249,14 @@ El formato de las carpetas y archivos que espera la API está descrito en
 El POST guarda el `id` creado en la variable `cartera_id`, y el PUT y el DELETE actúan sobre esa cartera.
 La variable `base_url` vale `http://127.0.0.1:8000`; cámbiala si usas otro puerto.
 
-> ⚠️ Si ejecutas la colección completa con *Run collection*, termina con el DELETE y no queda ninguna cartera.
+> Si ejecutas la colección completa con *Run collection*, termina con el DELETE y no queda ninguna cartera.
 > Para dejarla guardada, envía solo el POST.
 
 Con la app de **Postman web** hay que instalar el *Desktop Agent*; la app de escritorio funciona sin nada extra.
 
 ---
 
-## ✅ Pruebas
+## Pruebas
 
 ```bash
 pip install pytest
@@ -268,7 +268,7 @@ Comprueban el CRUD completo, el cálculo de ganancias, las validaciones (`422`),
 
 ---
 
-## 🧱 Decisiones de diseño
+## Decisiones de diseño
 
 Cada decisión importante tiene su registro (ADR) con contexto, alternativas y consecuencias:
 
@@ -282,7 +282,7 @@ Cada decisión importante tiene su registro (ADR) con contexto, alternativas y c
 
 ---
 
-## 📁 Estructura del repositorio
+## Estructura del repositorio
 
 ```
 .
@@ -304,7 +304,7 @@ Cada decisión importante tiene su registro (ADR) con contexto, alternativas y c
 
 ---
 
-## ⚠️ Limitaciones conocidas
+## Limitaciones conocidas
 
 - **Pensada para un solo usuario:** `carteras.json` no tiene bloqueo de archivo y la API no tiene autenticación.
   Escucha solo en `127.0.0.1`, así que solo es accesible desde tu equipo.
